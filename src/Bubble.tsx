@@ -45,8 +45,8 @@ function Bubble({ text, user_uid, date }: BubbleProps) {
       <div
         className={
           isCurrentUser
-            ? "dark:bg-blue-500 bg-blue-300 p-2 rounded-md max-w-60 shadow-md dark:shadow-black flex flex-col"
-            : "dark:bg-slate-700 bg-slate-100 p-2 rounded-md max-w-60 shadow-md dark:shadow-slate-black flex flex-col"
+            ? "dark:bg-blue-500 bg-blue-300 p-2 rounded-md max-w-60 shadow-md dark:shadow-black flex flex-col break-words"
+            : "dark:bg-slate-700 bg-slate-100 p-2 rounded-md max-w-60 shadow-md dark:shadow-slate-black flex flex-col break-words"
         }
       >
         <p className="">{text}</p>

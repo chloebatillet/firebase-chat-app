@@ -59,7 +59,7 @@ function ChatApp({ setIsAuth }: ChatAppProps) {
     <main className="flex flex-col h-screen w-full ">
       <Header setIsAuth={setIsAuth} />
 
-      <div className="flex flex-col-reverse p-2 gap-2 grow overflow-auto">
+      <div className="flex flex-col-reverse p-6 gap-2 grow overflow-auto">
         {messages.map((e: any, index) => {
           return (
             <Bubble
