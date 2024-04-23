@@ -2,8 +2,11 @@ import { cookies } from "./assets/cookies-config";
 import { auth, provider } from "./firebase-config";
 import { signInWithPopup } from "firebase/auth";
 
+interface AuthProps {
+  setIsAuth: React.Dispatch<any>;
+}
 
-function Auth({ setIsAuth }) {
+function Auth({ setIsAuth }: AuthProps) {
   const signInWithGoogle = async () => {
     try {
       const res = await signInWithPopup(auth, provider);

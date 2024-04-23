@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import {
   addDoc,
   onSnapshot,
+  orderBy,
   query,
   serverTimestamp,
 } from "firebase/firestore";
@@ -14,19 +15,17 @@ interface ChatAppProps {
   setIsAuth: React.Dispatch<any>;
 }
 
+interface Message {
+  id: string;
+  text: string;
+  date: any;
+  user: string | null;
+}
+
+
 function ChatApp({ setIsAuth }: ChatAppProps) {
   const [textMessage, setTextMessage] = useState("");
-  const [messages, setMessages] = useState([]);
-
-  // const truc = import.meta.env.VITE_API_URL
-  // console.log(truc);
-  
-
-  //   const getMessages = async () => {
-  //     const data = await getDocs(messagesRef);
-  //     console.log(data);
-  //     setMessages(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-  //   };
+  const [messages, setMessages] = useState<Message[]>([]);
 
   const sendMessage = async (ev: React.FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
@@ -42,26 +41,20 @@ function ChatApp({ setIsAuth }: ChatAppProps) {
     });
 
     setTextMessage("");
-    // getMessages();
   };
 
-  //   useEffect(() => {
-  //     getMessages();
-  //   }, []);
-
   useEffect(() => {
-    const queryMessages = query(messagesRef);
+    const queryMessages = query(messagesRef, orderBy('date'));
     const unsubscribe = onSnapshot(queryMessages, (snapshot) => {
 
-      let messages: ((prevState: never[]) => never[]) | { id: string; }[] = [];
+      let messages: Message[] = [];
       snapshot.forEach((doc) => {
-        messages.push({ ...doc.data(), id: doc.id });
+        messages.push({ ...doc.data(), id: doc.id } as Message);
       });      
 
-      setMessages(messages)
+      setMessages(messages) 
     });
-
-
+    
     return () => unsubscribe();
   }, []);
 
