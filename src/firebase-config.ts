@@ -19,3 +19,4 @@ export const provider = new GoogleAuthProvider();
 export const db = getFirestore(app);
 
 export const messagesRef = collection(db, "messages");
+export const usersRef = collection(db, "users");

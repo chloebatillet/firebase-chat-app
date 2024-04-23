@@ -1,6 +1,8 @@
 import { cookies } from "./assets/cookies-config";
-import { auth, provider } from "./firebase-config";
+import { auth, provider, usersRef } from "./firebase-config";
 import { signInWithPopup } from "firebase/auth";
+import { findUser } from "./hooks/findUser";
+import { doc, setDoc } from "firebase/firestore";
 
 interface AuthProps {
   setIsAuth: React.Dispatch<any>;
@@ -9,24 +11,47 @@ interface AuthProps {
 function Auth({ setIsAuth }: AuthProps) {
   const signInWithGoogle = async () => {
     try {
+      // Résultat de la connexion Google
       const res = await signInWithPopup(auth, provider);
       console.log(res);
-      const user = { name: res.user.displayName, photo: res.user.photoURL };
 
+      // Recherche de l'utilisateur dans le firestore
+      let userExists = await findUser(res.user.uid);
+
+      // S'il n'existe pas, on l'ajoute
+      if (!userExists) {
+        console.log("Creating new user...");
+
+        // Ajout dans la collection user avec un customId == uid
+        const docRef = doc(usersRef, res.user.uid);
+        const data = {
+          display_name: res.user.displayName,
+          photo_url: res.user.photoURL,
+          uid: res.user.uid,
+        };
+        setDoc(docRef, data);
+
+        // Assignation à la variable
+        //! Vérifier les données stockées
+        userExists = await findUser(res.user.uid);
+      }
+
+      // Enregistrement dans les cookies
       cookies.set("auth-token", res.user.refreshToken);
-      cookies.set("user", user);
+      cookies.set("user", userExists);
 
+      // Authentification effectuée
       setIsAuth(true);
     } catch (error) {
       console.error(error);
     }
   };
   return (
-    <div className="bg-slate-950 max-w-60 rounded-md m-0 align-center p-6 flex flex-col text-center gap-6 shadow-lg">
+    <div className="dark:bg-slate-950 bg-slate-100 max-w-60 rounded-md m-0 align-center p-6 flex flex-col text-center gap-6 shadow-lg">
       <h2 className="text-xl">Sign In with Google to continue</h2>
       <button
         onClick={signInWithGoogle}
-        className="bg-green-500 px-2 py-1 rounded-md flex items-end justify-center gap-2 hover:shadow-center-md hover:shadow-green-400/70 focus:shadow-center-lg focus:shadow-green-400/70 transition-all"
+        className="dark:bg-green-500 bg-green-400 px-2 py-1 rounded-md flex items-end justify-center gap-2 hover:shadow-center-md hover:shadow-green-400/70 focus:shadow-center-lg focus:shadow-green-400/70"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -37,7 +62,7 @@ function Auth({ setIsAuth }: AuthProps) {
           viewBox="0,0,256,256"
         >
           <g
-            fill="#ffffff"
+          className="dark:fill-slate-50 fill-slate-800"
             fill-rule="nonzero"
             stroke="none"
             stroke-width="1"
@@ -50,7 +75,6 @@ function Auth({ setIsAuth }: AuthProps) {
             font-weight="none"
             font-size="none"
             text-anchor="none"
-            //style="mix-blend-mode: normal"
           >
             <g transform="scale(8,8)">
               <path d="M16.00391,14.0625v4.20313h5.98828c-0.78125,2.54688 -2.91016,4.37109 -5.98828,4.37109c-3.66406,0 -6.63672,-2.97266 -6.63672,-6.63672c0,-3.66406 2.96875,-6.63672 6.63672,-6.63672c1.64844,0 3.15234,0.60547 4.3125,1.60156l3.09375,-3.09766c-1.95312,-1.78125 -4.55469,-2.86719 -7.40625,-2.86719c-6.07812,0 -11.00391,4.92578 -11.00391,11c0,6.07422 4.92578,11 11.00391,11c9.23438,0 11.27344,-8.63672 10.36719,-12.92187z"></path>
