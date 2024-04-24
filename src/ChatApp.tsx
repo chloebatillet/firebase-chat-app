@@ -84,7 +84,7 @@ function ChatApp({ setIsAuth }: ChatAppProps) {
           <div className="px-2 py-1 rounded-md grow dark:bg-slate-800 bg-slate-50 border dark:border-slate-950 flex">
             <button
               type="button"
-              className="hover:bg-slate-600/50 transition ease-in-out rounded-lg w-8 h-8 p-2 self-center"
+              className="dark:hover:bg-slate-600/50 hover:bg-slate-300/50 transition ease-in-out rounded-lg w-8 h-8 p-2 self-center"
               onClick={() => setIsOpen(!isOpen)}
             >
               <BsEmojiSmile className="hover:animate-rotate" />
@@ -100,8 +100,7 @@ function ChatApp({ setIsAuth }: ChatAppProps) {
             ></textarea>
             <button
               type="button"
-              className="hover:bg-slate-600/50 transition ease-in-out rounded-lg w-8 h-8 p-2 self-center"
-              onClick={() => setIsOpen(!isOpen)}
+              className="dark:hover:bg-slate-600/50 hover:bg-slate-300/50 transition ease-in-out rounded-lg w-8 h-8 p-2 self-center"
             >
               <FiImage />
             </button>
@@ -117,7 +116,7 @@ function ChatApp({ setIsAuth }: ChatAppProps) {
 
         {/* Emojis */}
         <div
-          className={`emoji-picker-container bg-slate-950 ${
+          className={`emoji-picker-container dark:bg-slate-950 bg-slate-100 ${
             isOpen ? "h-[50vh] max-h-[250px]" : "h-0"
           } overflow-hidden transition-all ease`}
         >
