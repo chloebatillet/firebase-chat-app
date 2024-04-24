@@ -122,7 +122,7 @@ function ChatApp({ setIsAuth }: ChatAppProps) {
           } overflow-hidden transition-all ease`}
         >
           <EmojiPicker
-            onEmojiClick={(emojiData: EmojiClickData, event: MouseEvent) => {
+            onEmojiClick={(emojiData: EmojiClickData) => {
               setTextMessage((prev) => prev + emojiData.emoji);
             }}
             theme={"auto" as any}
