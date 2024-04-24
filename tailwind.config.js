@@ -11,6 +11,9 @@ export default {
       fontSize: {
         xxs: "0.5rem",
       },
+      animation: {
+        "rotate": "spin 0.6s ease-out",
+      },
     },
   },
   plugins: [],
