@@ -1,8 +1,9 @@
-import { auth, messagesRef } from "./firebase-config";
+import { auth, db, messagesRef, userchatsRef } from "./firebase-config";
 import "./App.css";
 import { useEffect, useState } from "react";
 import {
   addDoc,
+  doc,
   limit,
   onSnapshot,
   orderBy,
@@ -25,6 +26,7 @@ function ChatApp({ setIsAuth }: ChatAppProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isOpen, setIsOpen] = useState(false);
 
+
   const sendMessage = async (ev: React.FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
 
@@ -43,21 +45,33 @@ function ChatApp({ setIsAuth }: ChatAppProps) {
   };
 
   useEffect(() => {
+    // const queryMessages = query(
+    //   messagesRef,
+    //   orderBy("date", "desc"),
+    //   limit(30)
+    // );
+    // const unsubscribe = onSnapshot(queryMessages, (snapshot) => {
+    //   let messages: Message[] = [];
+    //   snapshot.forEach((doc) => {
+    //     messages.push({ ...doc.data(), id: doc.id } as Message);
+    //   });
+
+    //   setMessages(messages);
+    // });
+
     const queryMessages = query(
-      messagesRef,
-      orderBy("date", "desc"),
-      limit(50)
+      userchatsRef
     );
-    const unsubscribe = onSnapshot(queryMessages, (snapshot) => {
-      let messages: Message[] = [];
+    const unsub = onSnapshot(queryMessages, (snapshot) => {
+      let chats: any[] = [];
       snapshot.forEach((doc) => {
-        messages.push({ ...doc.data(), id: doc.id } as Message);
+        chats.push({ ...doc.data(), id: doc.id } as any);
       });
 
-      setMessages(messages);
+      console.log(chats);
     });
 
-    return () => unsubscribe();
+    return () => unsub();
   }, []);
 
   return (
