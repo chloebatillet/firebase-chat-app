@@ -1,9 +1,8 @@
-import { auth, db, messagesRef, userchatsRef } from "./firebase-config";
+import { auth, messagesRef } from "./firebase-config";
 import "./App.css";
 import { useEffect, useState } from "react";
 import {
   addDoc,
-  doc,
   limit,
   onSnapshot,
   orderBy,
@@ -17,11 +16,8 @@ import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
 import { BsEmojiSmile } from "react-icons/bs";
 import { FiImage } from "react-icons/fi";
 
-interface ChatAppProps {
-  setIsAuth: React.Dispatch<any>;
-}
 
-function ChatApp({ setIsAuth }: ChatAppProps) {
+function ChatApp() {
   const [textMessage, setTextMessage] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -45,38 +41,38 @@ function ChatApp({ setIsAuth }: ChatAppProps) {
   };
 
   useEffect(() => {
-    // const queryMessages = query(
-    //   messagesRef,
-    //   orderBy("date", "desc"),
-    //   limit(30)
-    // );
-    // const unsubscribe = onSnapshot(queryMessages, (snapshot) => {
-    //   let messages: Message[] = [];
-    //   snapshot.forEach((doc) => {
-    //     messages.push({ ...doc.data(), id: doc.id } as Message);
-    //   });
-
-    //   setMessages(messages);
-    // });
-
     const queryMessages = query(
-      userchatsRef
+      messagesRef,
+      orderBy("date", "desc"),
+      limit(30)
     );
     const unsub = onSnapshot(queryMessages, (snapshot) => {
-      let chats: any[] = [];
+      let messages: Message[] = [];
       snapshot.forEach((doc) => {
-        chats.push({ ...doc.data(), id: doc.id } as any);
+        messages.push({ ...doc.data(), id: doc.id } as Message);
       });
 
-      console.log(chats);
+      setMessages(messages);
     });
+
+    // const queryMessages = query(
+    //   userchatsRef
+    // );
+    // const unsub = onSnapshot(queryMessages, (snapshot) => {
+    //   let chats: any[] = [];
+    //   snapshot.forEach((doc) => {
+    //     chats.push({ ...doc.data(), id: doc.id } as any);
+    //   });
+
+    //   console.log(chats);
+    // });
 
     return () => unsub();
   }, []);
 
   return (
     <main className="flex flex-col h-screen w-full ">
-      <Header setIsAuth={setIsAuth} />
+      <Header />
 
       {/* Chat */}
       <div className="flex flex-col-reverse p-6 gap-2 grow overflow-auto">

@@ -1,19 +1,17 @@
 import ChatApp from "./ChatApp";
 import Auth from "./Auth";
-import { useState } from "react";
-
-import Cookies from "universal-cookie";
-const cookies = new Cookies();
 
 import "./App.css";
+import { useAppSelector } from "./hooks/redux";
 
 function App() {
-  const [isAuth, setIsAuth] = useState(cookies.get('auth-token'));
+  // const [isAuth, setIsAuth] = useState(cookies.get('auth-token'));
+  const {isAuth} = useAppSelector((state) => state.user)
 
   return isAuth ? (
-    <ChatApp setIsAuth={setIsAuth} />
+    <ChatApp />
   ) : (
-    <Auth setIsAuth={setIsAuth} />
+    <Auth />
   );
 }
 
