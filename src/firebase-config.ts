@@ -18,7 +18,7 @@ export const auth = getAuth(app);
 export const provider = new GoogleAuthProvider();
 export const db = getFirestore(app);
 
-export const messagesRef = collection(db, "messages");
+// export const messagesRef = collection(db, "messages");
 export const usersRef = collection(db, "users");
 export const userchatsRef = collection(db, "userchats");
 export const chatsRef = collection(db, "chats");

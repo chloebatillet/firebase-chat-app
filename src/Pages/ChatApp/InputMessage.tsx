@@ -2,11 +2,12 @@ import { useState } from "react";
 import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
 import { BsEmojiSmile } from "react-icons/bs";
 import { FiImage } from "react-icons/fi";
-import { useAppDispatch } from "../../hooks/redux";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { sendMessage } from "../../store/reducers/chatReducer";
 
 function InputMessage() {
   const dispatch = useAppDispatch();
+  const { chatID } = useAppSelector((state) => state.chat);
   const [textMessage, setTextMessage] = useState("");
   const [isOpen, setIsOpen] = useState(false);
 
@@ -18,8 +19,10 @@ function InputMessage() {
       setTextMessage("");
       return;
     }
-    
-    dispatch(sendMessage(textMessage))
+
+    if (chatID) {
+      dispatch(sendMessage({ chatID, textMessage }));
+    }
 
     setTextMessage("");
   };

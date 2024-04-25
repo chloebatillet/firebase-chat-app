@@ -9,7 +9,7 @@ import {
   query,
   serverTimestamp,
 } from "firebase/firestore";
-import { messagesRef, auth, db } from "../../firebase-config";
+import { auth, db } from "../../firebase-config";
 import { formatDate } from "../../hooks/formatDate";
 import { Message } from "../../@types";
 
@@ -46,7 +46,11 @@ export const selectChat = createAsyncThunk(
         });
       }
 
-      return { chatID, createdAt: docSnap.data()?.createdAt, messages: messageList };
+      return {
+        chatID,
+        createdAt: docSnap.data()?.createdAt,
+        messages: messageList,
+      };
     } catch (error: any) {
       console.log(error);
       throw new Error(error.response.data.error);
@@ -56,12 +60,15 @@ export const selectChat = createAsyncThunk(
 
 export const sendMessage = createAsyncThunk(
   "chat/send-message",
-  async (textMessage: string) => {
+  async ({ chatID, textMessage }: { chatID: string; textMessage: string }) => {
     try {
-      await addDoc(messagesRef, {
+      const docRef = doc(db, "chats", chatID);
+      const docColl = collection(docRef, "messages");
+
+      await addDoc(docColl, {
         text: textMessage.trim(),
-        date: serverTimestamp(),
-        user_uid: auth.currentUser?.uid,
+        createdAt: serverTimestamp(),
+        senderID: auth.currentUser?.uid,
       });
 
       return;
