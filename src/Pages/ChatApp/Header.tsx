@@ -1,8 +1,7 @@
 import { FaPowerOff } from "react-icons/fa6";
-import { getCookie } from "./hooks/getCookie";
-import { useAppDispatch } from "./hooks/redux";
-import { logout } from "./store/reducers/userReducer";
-
+import { getCookie } from "../../hooks/getCookie";
+import { useAppDispatch } from "../../hooks/redux";
+import { logout } from "../../store/reducers/userReducer";
 
 function Header() {
   const dispatch = useAppDispatch();

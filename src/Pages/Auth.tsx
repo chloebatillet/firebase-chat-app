@@ -1,6 +1,6 @@
 import { FaGoogle } from "react-icons/fa";
-import { useAppDispatch } from "./hooks/redux";
-import { signInWithGoogle } from "./store/reducers/userReducer";
+import { useAppDispatch } from "../hooks/redux";
+import { signInWithGoogle } from "../store/reducers/userReducer";
 
 function Auth() {
   const dispatch = useAppDispatch();

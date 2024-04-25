@@ -50,7 +50,7 @@ export const signInWithGoogle = createAsyncThunk(
     try {
       // Résultat de la connexion Google
       const res = await signInWithPopup(auth, provider);
-      
+
       // Recherche de l'utilisateur dans le firestore
       let userExists = await findUser(res.user.uid);
 
@@ -85,22 +85,8 @@ export const signInWithGoogle = createAsyncThunk(
   }
 );
 
-// exemple async
-// export const fetchProducts = createAsyncThunk("products/fetch", async () => {
-//   try {
-//     const response = await fetch(
-//       "https://elevatex-backoffice.vercel.app/products"
-//     );
-//     const data = await response.json();
-//     console.log(data);
-//     return data;
-//   } catch (error: any) {
-//     console.log(error);
-//     throw new Error(error.response.data.error);
-//   }
-// });
-
 export const logout = createAction("user/logout");
+
 
 const userReducer = createSlice({
   name: "userReducer",

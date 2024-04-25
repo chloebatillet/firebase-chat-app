@@ -1,18 +1,13 @@
-import ChatApp from "./ChatApp";
-import Auth from "./Auth";
+import ChatApp from "./Pages/ChatApp/ChatApp";
+import Auth from "./Pages/Auth";
 
 import "./App.css";
 import { useAppSelector } from "./hooks/redux";
 
 function App() {
-  // const [isAuth, setIsAuth] = useState(cookies.get('auth-token'));
-  const {isAuth} = useAppSelector((state) => state.user)
+  const { isAuth } = useAppSelector((state) => state.user);
 
-  return isAuth ? (
-    <ChatApp />
-  ) : (
-    <Auth />
-  );
+  return isAuth ? <ChatApp /> : <Auth />;
 }
 
 export default App;

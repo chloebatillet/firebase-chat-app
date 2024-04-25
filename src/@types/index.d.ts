@@ -7,11 +7,11 @@ export interface User {
 }
 
 
-export interface Message {
-  id: string;
+interface Message {
   text: string;
-  date: any;
-  user_uid: string | null;
+  senderID: string;
+  messageID: string;
+  createdAt: any;
 }
 
 export interface Userchat {

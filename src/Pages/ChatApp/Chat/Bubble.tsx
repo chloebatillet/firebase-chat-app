@@ -1,34 +1,29 @@
 import { useEffect, useState } from "react";
-import { formatDate } from "./hooks/formatDate";
-import { getCookie } from "./hooks/getCookie";
-import { findUser } from "./hooks/findUser";
-import { User } from "./@types";
+import { formatDate } from "../../../hooks/formatDate";
+import { getCookie } from "../../../hooks/getCookie";
+import { findUser } from "../../../hooks/findUser";
+import { Message, User } from "../../../@types";
 
-interface BubbleProps {
-  text: string;
-  user_uid: string;
-  date: any;
-}
 
-function Bubble({ text, user_uid, date }: BubbleProps) {
+function Bubble({ text, senderID, createdAt }: Message) {
   const [isCurrentUser, setIsCurrentUser] = useState(false);
   const [sender, setSender] = useState<User>();
   let formatedDate;
 
   const getUserInfo = async (uid: string) => {
-    const user = await findUser(uid) as User;
+    const user = (await findUser(uid)) as User;
     setSender(user);
   };
 
   useEffect(() => {
-    getCookie("user").uid === user_uid
+    getCookie("user").uid === senderID
       ? setIsCurrentUser(true)
       : setIsCurrentUser(false);
 
-    getUserInfo(user_uid);
+    getUserInfo(senderID);
   }, []);
 
-  date ? (formatedDate = formatDate(date)) : (formatedDate = "");
+  createdAt ? (formatedDate = formatDate(createdAt)) : (formatedDate = "");
 
   return (
     <div className={isCurrentUser ? "self-end" : "self-start"}>
