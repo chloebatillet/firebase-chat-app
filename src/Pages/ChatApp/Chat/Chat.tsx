@@ -10,27 +10,28 @@ import {
   orderBy,
   query,
 } from "firebase/firestore";
+import { IoMdArrowUp } from "react-icons/io";
 
 function Chat() {
   const { messages, chatID } = useAppSelector((state) => state.chat);
-  const [mess, setMess] = useState<Message[]>(messages)  
+  const [mess, setMess] = useState<Message[]>(messages);
 
   useEffect(() => {
     const q = query(
       collection(db, "chats", `${chatID}`, "messages"),
-      limit(10),
+      limit(25),
       orderBy("createdAt", "desc")
     );
     const unsub = onSnapshot(q, (querySnapshot) => {
       const messageList: Message[] = [];
-      querySnapshot.forEach((doc) => {        
+      querySnapshot.forEach((doc) => {
         messageList.push(doc.data() as Message);
       });
 
-      setMess(messageList)      
+      setMess(messageList);
     });
 
-    return () => unsub()
+    return () => unsub();
   }, [chatID]);
 
   return (
@@ -46,6 +47,13 @@ function Chat() {
           ></Bubble>
         );
       })}
+
+      {mess.length === 25 && (
+        <div className="self-center flex flex-col items-center">
+          <IoMdArrowUp />
+          <p className="self-center">Load more</p>
+        </div>
+      )}
     </div>
   );
 }

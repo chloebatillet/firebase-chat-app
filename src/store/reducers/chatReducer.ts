@@ -5,6 +5,7 @@ import {
   doc,
   getDoc,
   getDocs,
+  limit,
   orderBy,
   query,
   serverTimestamp,
@@ -35,7 +36,8 @@ export const selectChat = createAsyncThunk(
       if (docSnap.exists()) {
         const q = query(
           collection(docRef, "messages"),
-          orderBy("createdAt", "desc")
+          orderBy("createdAt", "desc"),
+          limit(25)
         );
 
         const querySnapshot = await getDocs(q);
